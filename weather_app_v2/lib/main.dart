@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -86,6 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
     var url = Uri.parse(
         'https://api.openweathermap.org/data/2.5/weather?q=$selectLoc&appid=$apiid&units=metric');
     var response = await http.get(url);
+    var responses = await http.put(url);
     var rescode = response.statusCode;
     if (rescode == 200) {
       var jsonData = response.body;
