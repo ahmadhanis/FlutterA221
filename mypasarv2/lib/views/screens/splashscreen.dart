@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import '../../models/user.dart';
 import 'mainscreen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -13,10 +14,11 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    User user = User(id: "0",email: "unregistered", name: "unregistered",address: "na",phone: "0123456789",regdate: "0");
     Timer(
         const Duration(seconds: 3),
         () => Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (content) => const MainScreen())));
+            MaterialPageRoute(builder: (content) =>  MainScreen(user: user))));
   }
 
   @override

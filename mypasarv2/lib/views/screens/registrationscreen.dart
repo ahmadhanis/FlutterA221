@@ -76,6 +76,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ))),
                   TextFormField(
                       controller: _phoneEditingController,
+                       validator: (val) => val!.isEmpty || (val.length < 10)
+                          ? "Please enter valid phone number"
+                          : null,
                       keyboardType: TextInputType.phone,
                       decoration: const InputDecoration(
                           labelText: 'Phone',

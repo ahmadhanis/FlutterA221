@@ -3,11 +3,13 @@ import 'package:mypasarv2/views/screens/loginscreen.dart';
 import 'package:mypasarv2/views/screens/mainscreen.dart';
 import 'package:mypasarv2/views/screens/registrationscreen.dart';
 
+import '../../models/user.dart';
 import '../shared/mainmenu.dart';
 import 'profilescreen.dart';
 
 class SellerScreen extends StatefulWidget {
-  const SellerScreen({super.key});
+  final User user;
+  const SellerScreen({super.key, required this.user});
 
   @override
   State<SellerScreen> createState() => _SellerScreenState();
@@ -28,7 +30,7 @@ class _SellerScreenState extends State<SellerScreen> {
                 icon: const Icon(Icons.login))
           ]),
           body: const Center(child: Text("Seller")),
-          drawer: const MainMenuWidget()),
+          drawer:  MainMenuWidget(user: widget.user)),
     );
   }
 

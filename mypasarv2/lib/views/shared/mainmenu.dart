@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import '../../models/user.dart';
 import '../screens/mainscreen.dart';
 import '../screens/profilescreen.dart';
 import '../screens/sellerscreen.dart';
 import 'EnterExitRoute.dart';
 
 class MainMenuWidget extends StatefulWidget {
-  const MainMenuWidget({super.key});
+  final User user;
+  const MainMenuWidget({super.key, required this.user});
 
   @override
   State<MainMenuWidget> createState() => _MainMenuWidgetState();
@@ -19,10 +21,10 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
       elevation: 10,
       child: ListView(
         children: [
-          const UserAccountsDrawerHeader(
-            accountEmail: Text("Unregistered"),
-            accountName: Text("Unregistered"),
-            currentAccountPicture: CircleAvatar(
+          UserAccountsDrawerHeader(
+            accountEmail: Text(widget.user.email.toString()),
+            accountName: Text(widget.user.name.toString()),
+            currentAccountPicture: const CircleAvatar(
               radius: 30.0,
             ),
           ),
@@ -32,8 +34,11 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
               Navigator.pop(context);
               // Navigator.push(context,
               //     MaterialPageRoute(builder: (content) => MainScreen()));
-              Navigator.push(context,
-                  EnterExitRoute(exitPage: MainScreen(), enterPage: MainScreen()));
+              Navigator.push(
+                  context,
+                  EnterExitRoute(
+                      exitPage: MainScreen(user: widget.user),
+                      enterPage: MainScreen(user: widget.user)));
             },
           ),
           ListTile(
@@ -47,7 +52,8 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
               Navigator.push(
                   context,
                   EnterExitRoute(
-                      exitPage: MainScreen(), enterPage: SellerScreen()));
+                      exitPage: MainScreen(user: widget.user),
+                      enterPage: SellerScreen(user: widget.user)));
             },
           ),
           ListTile(
@@ -58,8 +64,13 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
               //     context,
               //     MaterialPageRoute(
               //         builder: (content) => const ProfileScreen()));
-              Navigator.push(context,
-                  EnterExitRoute(exitPage: MainScreen(), enterPage: ProfileScreen()));
+              Navigator.push(
+                  context,
+                  EnterExitRoute(
+                      exitPage: MainScreen(user: widget.user),
+                      enterPage: ProfileScreen(
+                        user: widget.user,
+                      )));
             },
           ),
         ],
