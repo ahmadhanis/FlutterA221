@@ -165,14 +165,14 @@ class _LoginScreenState extends State<LoginScreen> {
       print(response.body);
       if (response.statusCode == 200) {
         var jsonResponse = json.decode(response.body);
+        print(jsonResponse);
         User user = User.fromJson(jsonResponse['data']);
-
+        print(user.phone);
+        //User user = User(id: jsonResponse['data']['name'],email: jsonResponse['email'],name: "",phone: "",address: "",regdate: "");
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (content) => MainScreen(
-                      user: user,
-                    )));
+                builder: (content) => MainScreen(user: user)));
       } else {
         Fluttertoast.showToast(
             msg: "Login Failed",
