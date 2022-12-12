@@ -163,16 +163,13 @@ class _LoginScreenState extends State<LoginScreen> {
     http.post(Uri.parse("${Config.SERVER}/php/login_user.php"),
         body: {"email": _email, "password": _pass}).then((response) {
       print(response.body);
-      if (response.statusCode == 200) {
-        var jsonResponse = json.decode(response.body);
+      var jsonResponse = json.decode(response.body);
+      if (response.statusCode == 200 && jsonResponse['status'] == "success") {
         print(jsonResponse);
         User user = User.fromJson(jsonResponse['data']);
         print(user.phone);
-        //User user = User(id: jsonResponse['data']['name'],email: jsonResponse['email'],name: "",phone: "",address: "",regdate: "");
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (content) => MainScreen(user: user)));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (content) => MainScreen(user: user)));
       } else {
         Fluttertoast.showToast(
             msg: "Login Failed",
