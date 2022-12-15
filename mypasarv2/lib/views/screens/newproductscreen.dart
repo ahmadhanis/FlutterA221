@@ -1,17 +1,46 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:http/http.dart' as http;
+import 'package:mypasarv2/config.dart';
+import 'package:mypasarv2/models/user.dart';
 
 class NewProductScreen extends StatefulWidget {
-  const NewProductScreen({super.key});
+  final User user;
+  const NewProductScreen({super.key, required this.user});
 
   @override
   State<NewProductScreen> createState() => _NewProductScreenState();
 }
 
 class _NewProductScreenState extends State<NewProductScreen> {
-  
+  late Position _position;
+  final TextEditingController _prnameEditingController =
+      TextEditingController();
+  final TextEditingController _prdescEditingController =
+      TextEditingController();
+  final TextEditingController _prpriceEditingController =
+      TextEditingController();
+  final TextEditingController _prdelEditingController = TextEditingController();
+  final TextEditingController _prqtyEditingController = TextEditingController();
+  final TextEditingController _prstateEditingController =
+      TextEditingController();
+  final TextEditingController _prlocalEditingController =
+      TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  var _lat, _lng;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkPermissionGetLoc();
+  }
+
   File? _image;
   var pathAsset = "assets/images/camera.png";
   bool _isChecked = false;
@@ -41,6 +70,7 @@ class _NewProductScreenState extends State<NewProductScreen> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Form(
+                key: _formKey,
                 child: Column(children: [
                   const Padding(
                     padding: EdgeInsets.all(8.0),
@@ -54,6 +84,7 @@ class _NewProductScreenState extends State<NewProductScreen> {
                   ),
                   TextFormField(
                       textInputAction: TextInputAction.next,
+                      controller: _prnameEditingController,
                       validator: (val) => val!.isEmpty || (val.length < 3)
                           ? "Product name must be longer than 3"
                           : null,
@@ -67,6 +98,7 @@ class _NewProductScreenState extends State<NewProductScreen> {
                           ))),
                   TextFormField(
                       textInputAction: TextInputAction.next,
+                      controller: _prdescEditingController,
                       validator: (val) => val!.isEmpty || (val.length < 10)
                           ? "Product description must be longer than 10"
                           : null,
@@ -88,6 +120,7 @@ class _NewProductScreenState extends State<NewProductScreen> {
                         flex: 5,
                         child: TextFormField(
                             textInputAction: TextInputAction.next,
+                            controller: _prpriceEditingController,
                             validator: (val) => val!.isEmpty || (val.length < 3)
                                 ? "Product price must contain value"
                                 : null,
@@ -104,7 +137,8 @@ class _NewProductScreenState extends State<NewProductScreen> {
                         flex: 5,
                         child: TextFormField(
                             textInputAction: TextInputAction.next,
-                            validator: (val) => val!.isEmpty || (val.length < 3)
+                            controller: _prqtyEditingController,
+                            validator: (val) => val!.isEmpty
                                 ? "Quantity should be more than 0"
                                 : null,
                             keyboardType: TextInputType.number,
@@ -118,11 +152,52 @@ class _NewProductScreenState extends State<NewProductScreen> {
                       ),
                     ],
                   ),
+                  Row(
+                    children: [
+                      Flexible(
+                          flex: 5,
+                          child: TextFormField(
+                              textInputAction: TextInputAction.next,
+                              validator: (val) =>
+                                  val!.isEmpty || (val.length < 3)
+                                      ? "Current State"
+                                      : null,
+                              enabled: false,
+                              controller: _prstateEditingController,
+                              keyboardType: TextInputType.text,
+                              decoration: const InputDecoration(
+                                  labelText: 'Current States',
+                                  labelStyle: TextStyle(),
+                                  icon: Icon(Icons.flag),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(width: 2.0),
+                                  )))),
+                      Flexible(
+                        flex: 5,
+                        child: TextFormField(
+                            textInputAction: TextInputAction.next,
+                            enabled: false,
+                            validator: (val) => val!.isEmpty || (val.length < 3)
+                                ? "Current Locality"
+                                : null,
+                            controller: _prlocalEditingController,
+                            keyboardType: TextInputType.text,
+                            decoration: const InputDecoration(
+                                labelText: 'Current Locality',
+                                labelStyle: TextStyle(),
+                                icon: Icon(Icons.map),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(width: 2.0),
+                                ))),
+                      )
+                    ],
+                  ),
                   Row(children: [
                     Flexible(
                       flex: 5,
                       child: TextFormField(
                           textInputAction: TextInputAction.next,
+                          controller: _prdelEditingController,
                           validator: (val) =>
                               val!.isEmpty ? "Must be more than zero" : null,
                           keyboardType: TextInputType.number,
@@ -162,7 +237,70 @@ class _NewProductScreenState extends State<NewProductScreen> {
         ));
   }
 
-  _newProductDialog() {}
+  _newProductDialog() {
+    if (_image == null) {
+      Fluttertoast.showToast(
+          msg: "Please take picture of your product/service",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          fontSize: 14.0);
+      return;
+    }
+    if (!_formKey.currentState!.validate()) {
+      Fluttertoast.showToast(
+          msg: "Please complete the form first",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          fontSize: 14.0);
+      return;
+    }
+    if (!_isChecked) {
+      Fluttertoast.showToast(
+          msg: "Please check agree checkbox",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          fontSize: 14.0);
+      return;
+    }
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
+          title: const Text(
+            "Insert this product/service?",
+            style: TextStyle(),
+          ),
+          content: const Text("Are you sure?", style: TextStyle()),
+          actions: <Widget>[
+            TextButton(
+              child: const Text(
+                "Yes",
+                style: TextStyle(),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+                insertProduct();
+              },
+            ),
+            TextButton(
+              child: const Text(
+                "No",
+                style: TextStyle(),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   void _selectImageDialog() {
     showDialog(
@@ -251,5 +389,71 @@ class _NewProductScreenState extends State<NewProductScreen> {
       _image = imageFile;
       setState(() {});
     }
+  }
+
+  void _checkPermissionGetLoc() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error('Location permissions are permanently denied.');
+    }
+    _position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    print(_position.latitude);
+    print(_position.longitude);
+    _getAddress(_position);
+  }
+
+  _getAddress(Position pos) async {
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(pos.latitude, pos.longitude);
+    setState(() {
+      _prstateEditingController.text =
+          placemarks[0].administrativeArea.toString();
+      _prlocalEditingController.text = placemarks[0].locality.toString();
+      _lat = pos.latitude.toString();
+      _lng = pos.longitude.toString();
+      String loc =
+          "${placemarks[0].locality},${placemarks[0].administrativeArea},${placemarks[0].country}";
+      print(loc);
+    });
+  }
+
+  void insertProduct() {
+    String prname = _prnameEditingController.text;
+    String prdesc = _prdescEditingController.text;
+    String prprice = _prpriceEditingController.text;
+    String delivery = _prdelEditingController.text;
+    String qty = _prqtyEditingController.text;
+    String state = _prstateEditingController.text;
+    String local = _prdelEditingController.text;
+
+    String base64Image = base64Encode(_image!.readAsBytesSync());
+    http.post(Uri.parse("${Config.SERVER}/php/insert_product.php"), body: {
+      "userid": widget.user.id,
+      "prname": prname,
+      "prdesc": prdesc,
+      "prprice": prprice,
+      "delivery": delivery,
+      "qty": qty,
+      "state": state,
+      "local": local,
+      "lat": _lat,
+      "lon": _lng,
+      "image": base64Image
+    }).then((response) {
+      print(response.body);
+    });
   }
 }

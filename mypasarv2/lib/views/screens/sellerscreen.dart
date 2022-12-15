@@ -34,7 +34,6 @@ class _SellerScreenState extends State<SellerScreen> {
                 itemBuilder: (context) {
               return [
                 const PopupMenuItem<int>(
-                  
                   value: 0,
                   child: Text("New Product"),
                 ),
@@ -79,7 +78,11 @@ class _SellerScreenState extends State<SellerScreen> {
           fontSize: 14.0);
       return;
     }
-    Navigator.push(context,
-        MaterialPageRoute(builder: (content) => const NewProductScreen()));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (content) => NewProductScreen(
+                  user: widget.user,
+                )));
   }
 }
