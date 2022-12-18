@@ -12,14 +12,15 @@ import 'package:mypasarv2/models/user.dart';
 
 class NewProductScreen extends StatefulWidget {
   final User user;
-  const NewProductScreen({super.key, required this.user});
+  final Position position;
+  const NewProductScreen(
+      {super.key, required this.user, required this.position});
 
   @override
   State<NewProductScreen> createState() => _NewProductScreenState();
 }
 
 class _NewProductScreenState extends State<NewProductScreen> {
-  late Position _position;
   final TextEditingController _prnameEditingController =
       TextEditingController();
   final TextEditingController _prdescEditingController =
@@ -38,7 +39,10 @@ class _NewProductScreenState extends State<NewProductScreen> {
   @override
   void initState() {
     super.initState();
-    _checkPermissionGetLoc();
+    // _checkPermissionGetLoc();
+    _lat = widget.position.latitude.toString();
+    _lng = widget.position.longitude.toString();
+    _getAddress();
   }
 
   File? _image;
@@ -121,7 +125,7 @@ class _NewProductScreenState extends State<NewProductScreen> {
                         child: TextFormField(
                             textInputAction: TextInputAction.next,
                             controller: _prpriceEditingController,
-                            validator: (val) => val!.isEmpty || (val.length < 3)
+                            validator: (val) => val!.isEmpty
                                 ? "Product price must contain value"
                                 : null,
                             keyboardType: TextInputType.number,
@@ -391,42 +395,37 @@ class _NewProductScreenState extends State<NewProductScreen> {
     }
   }
 
-  void _checkPermissionGetLoc() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
-    }
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
-      }
-    }
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error('Location permissions are permanently denied.');
-    }
-    _position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    print(_position.latitude);
-    print(_position.longitude);
-    _getAddress(_position);
-  }
+  // `void _checkPermissionGetLoc() async {
+  //   bool serviceEnabled;
+  //   LocationPermission permission;
+  //   serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  //   if (!serviceEnabled) {
+  //     return Future.error('Location services are disabled.');
+  //   }
+  //   permission = await Geolocator.checkPermission();
+  //   if (permission == LocationPermission.denied) {
+  //     permission = await Geolocator.requestPermission();
+  //     if (permission == LocationPermission.denied) {
+  //       return Future.error('Location permissions are denied');
+  //     }
+  //   }
+  //   if (permission == LocationPermission.deniedForever) {
+  //     return Future.error('Location permissions are permanently denied.');
+  //   }
+  //   _position = await Geolocator.getCurrentPosition(
+  //       desiredAccuracy: LocationAccuracy.high);
+  //   print(_position.latitude);
+  //   print(_position.longitude);
+  //   _getAddress(_position);
+  // }
 
-  _getAddress(Position pos) async {
-    List<Placemark> placemarks =
-        await placemarkFromCoordinates(pos.latitude, pos.longitude);
+  _getAddress() async {
+    List<Placemark> placemarks = await placemarkFromCoordinates(
+        widget.position.latitude, widget.position.longitude);
     setState(() {
       _prstateEditingController.text =
           placemarks[0].administrativeArea.toString();
       _prlocalEditingController.text = placemarks[0].locality.toString();
-      _lat = pos.latitude.toString();
-      _lng = pos.longitude.toString();
-      String loc =
-          "${placemarks[0].locality},${placemarks[0].administrativeArea},${placemarks[0].country}";
-      print(loc);
     });
   }
 
@@ -437,9 +436,9 @@ class _NewProductScreenState extends State<NewProductScreen> {
     String delivery = _prdelEditingController.text;
     String qty = _prqtyEditingController.text;
     String state = _prstateEditingController.text;
-    String local = _prdelEditingController.text;
-
+    String local = _prlocalEditingController.text;
     String base64Image = base64Encode(_image!.readAsBytesSync());
+    
     http.post(Uri.parse("${Config.SERVER}/php/insert_product.php"), body: {
       "userid": widget.user.id,
       "prname": prname,
@@ -453,7 +452,25 @@ class _NewProductScreenState extends State<NewProductScreen> {
       "lon": _lng,
       "image": base64Image
     }).then((response) {
-      print(response.body);
+      var data = jsonDecode(response.body);
+      if (response.statusCode == 200 && data['status'] == "success") {
+        Fluttertoast.showToast(
+            msg: "Success",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            fontSize: 14.0);
+            Navigator.of(context).pop();
+        return;
+      } else {
+        Fluttertoast.showToast(
+            msg: "Failed",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            fontSize: 14.0);
+        return;
+      }
     });
   }
 }
