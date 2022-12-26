@@ -39,15 +39,15 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> autoLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String _email = (prefs.getString('email')) ?? '';
-    String _pass = (prefs.getString('pass')) ?? '';
-    if (_email.isNotEmpty) {
+    String email = (prefs.getString('email')) ?? '';
+    String pass = (prefs.getString('pass')) ?? '';
+    if (email.isNotEmpty) {
       http.post(Uri.parse("${Config.SERVER}/php/login_user.php"),
-          body: {"email": _email, "password": _pass}).then((response) {
+          body: {"email": email, "password": pass}).then((response) {
             print(response.body);
         var jsonResponse = json.decode(response.body);
         if (response.statusCode == 200 && jsonResponse['status'] == "success") {
-          //var jsonResponse = json.decode(response.body);
+          
           User user = User.fromJson(jsonResponse['data']);
           Timer(
               const Duration(seconds: 3),
@@ -74,7 +74,7 @@ class _SplashScreenState extends State<SplashScreen> {
     } else {
       User user = User(
           id: "0",
-          email: "unregistered",
+          email: "unregistered@email.com",
           name: "unregistered",
           address: "na",
           phone: "0123456789",

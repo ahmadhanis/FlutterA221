@@ -6,8 +6,8 @@
 	}
 	include_once("dbconnect.php");
 	$userid = $_POST['userid'];
-  $prname= addslashes($_POST['prname']);
-	$prdesc= addslashes($_POST['prdesc']);
+  $prname= ucwords(addslashes($_POST['prname']));
+	$prdesc= ucfirst(addslashes($_POST['prdesc']));
 	$prprice= $_POST['prprice'];
   $delivery= $_POST['delivery'];
   $qty= $_POST['qty'];

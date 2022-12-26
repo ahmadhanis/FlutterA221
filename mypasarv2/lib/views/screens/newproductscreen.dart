@@ -13,8 +13,12 @@ import 'package:mypasarv2/models/user.dart';
 class NewProductScreen extends StatefulWidget {
   final User user;
   final Position position;
+  final List<Placemark> placemarks;
   const NewProductScreen(
-      {super.key, required this.user, required this.position});
+      {super.key,
+      required this.user,
+      required this.position,
+      required this.placemarks});
 
   @override
   State<NewProductScreen> createState() => _NewProductScreenState();
@@ -42,7 +46,10 @@ class _NewProductScreenState extends State<NewProductScreen> {
     // _checkPermissionGetLoc();
     _lat = widget.position.latitude.toString();
     _lng = widget.position.longitude.toString();
-    _getAddress();
+    //_getAddress();
+    _prstateEditingController.text =
+        widget.placemarks[0].administrativeArea.toString();
+    _prlocalEditingController.text = widget.placemarks[0].locality.toString();
   }
 
   File? _image;
@@ -241,7 +248,7 @@ class _NewProductScreenState extends State<NewProductScreen> {
         ));
   }
 
-  _newProductDialog() {
+  void _newProductDialog() {
     if (_image == null) {
       Fluttertoast.showToast(
           msg: "Please take picture of your product/service",
@@ -419,15 +426,25 @@ class _NewProductScreenState extends State<NewProductScreen> {
   //   _getAddress(_position);
   // }
 
-  _getAddress() async {
-    List<Placemark> placemarks = await placemarkFromCoordinates(
-        widget.position.latitude, widget.position.longitude);
-    setState(() {
-      _prstateEditingController.text =
-          placemarks[0].administrativeArea.toString();
-      _prlocalEditingController.text = placemarks[0].locality.toString();
-    });
-  }
+  // _getAddress() async {
+  //   try {
+  //     List<Placemark> placemarks = await placemarkFromCoordinates(
+  //         widget.position.latitude, widget.position.longitude);
+  //     setState(() {
+  //       _prstateEditingController.text =
+  //           placemarks[0].administrativeArea.toString();
+  //       _prlocalEditingController.text = placemarks[0].locality.toString();
+  //     });
+  //   } catch (e) {
+  //     Fluttertoast.showToast(
+  //           msg: "Error in fix your location. Try again.",
+  //           toastLength: Toast.LENGTH_SHORT,
+  //           gravity: ToastGravity.BOTTOM,
+  //           timeInSecForIosWeb: 1,
+  //           fontSize: 14.0);
+  //       Navigator.of(context).pop();
+  //   }
+  // }
 
   void insertProduct() {
     String prname = _prnameEditingController.text;
@@ -438,7 +455,7 @@ class _NewProductScreenState extends State<NewProductScreen> {
     String state = _prstateEditingController.text;
     String local = _prlocalEditingController.text;
     String base64Image = base64Encode(_image!.readAsBytesSync());
-    
+
     http.post(Uri.parse("${Config.SERVER}/php/insert_product.php"), body: {
       "userid": widget.user.id,
       "prname": prname,
@@ -460,7 +477,7 @@ class _NewProductScreenState extends State<NewProductScreen> {
             gravity: ToastGravity.BOTTOM,
             timeInSecForIosWeb: 1,
             fontSize: 14.0);
-            Navigator.of(context).pop();
+        Navigator.of(context).pop();
         return;
       } else {
         Fluttertoast.showToast(
