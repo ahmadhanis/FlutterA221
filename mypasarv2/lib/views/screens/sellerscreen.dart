@@ -104,10 +104,13 @@ class _SellerScreenState extends State<SellerScreen> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                          "Your current products/services (${productList.length} found)"),
+                        "Your current products/services (${productList.length} found)",
+                        style: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
                     ),
                     const SizedBox(
-                      height: 8,
+                      height: 4,
                     ),
                     Expanded(
                       child: GridView.count(
@@ -116,7 +119,12 @@ class _SellerScreenState extends State<SellerScreen> {
                           return Card(
                             elevation: 8,
                             child: InkWell(
-                              onTap: _showDetails,
+                              onTap: () {
+                                _showDetails(index);
+                              },
+                              onLongPress: () {
+                                _deleteDialog(index);
+                              },
                               child: Column(children: [
                                 const SizedBox(
                                   height: 8,
@@ -151,7 +159,7 @@ class _SellerScreenState extends State<SellerScreen> {
                                                 fontWeight: FontWeight.bold),
                                           ),
                                           Text(
-                                              "RM ${productList[index].productPrice}"),
+                                              "RM ${double.parse(productList[index].productPrice.toString()).toStringAsFixed(2)}"),
                                           Text(df.format(DateTime.parse(
                                               productList[index]
                                                   .productDate
@@ -317,6 +325,8 @@ class _SellerScreenState extends State<SellerScreen> {
                 "No Product Available"; //if no data returned show title center
             productList.clear();
           }
+        } else {
+          titlecenter = "No Product Available";
         }
       } else {
         titlecenter = "No Product Available"; //status code other than 200
@@ -326,8 +336,84 @@ class _SellerScreenState extends State<SellerScreen> {
     });
   }
 
-  void _showDetails() {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (content) => const DetailsScreen()));
+  Future<void> _showDetails(int index) async {
+    Product product = Product.fromJson(productList[index].toJson());
+
+    await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (content) => DetailsScreen(
+                  product: product,
+                  user: widget.user,
+                )));
+    _loadProducts();
+  }
+
+  _deleteDialog(int index) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
+          title: Text(
+            "Delete ${truncateString(productList[index].productName.toString(), 15)}",
+            style: TextStyle(),
+          ),
+          content: const Text("Are you sure?", style: TextStyle()),
+          actions: <Widget>[
+            TextButton(
+              child: const Text(
+                "Yes",
+                style: TextStyle(),
+              ),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                _deleteProduct(index);
+              },
+            ),
+            TextButton(
+              child: const Text(
+                "No",
+                style: TextStyle(),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _deleteProduct(index) {
+    try {
+      http.post(Uri.parse("${Config.SERVER}/php/delete_product.php"), body: {
+        "productid": productList[index].productId,
+      }).then((response) {
+        var data = jsonDecode(response.body);
+        if (response.statusCode == 200 && data['status'] == "success") {
+          Fluttertoast.showToast(
+              msg: "Success",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              fontSize: 14.0);
+          _loadProducts();
+          return;
+        } else {
+          Fluttertoast.showToast(
+              msg: "Failed",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              fontSize: 14.0);
+          return;
+        }
+      });
+    } catch (e) {
+      print(e.toString());
+    }
   }
 }
