@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mypasarv2/views/screens/loginscreen.dart';
 
 import '../../config.dart';
 
@@ -328,11 +329,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         var data = jsonDecode(response.body);
         if (response.statusCode == 200 && data['status'] == "success") {
           Fluttertoast.showToast(
-              msg: "Success",
+              msg: "Success. Please login",
               toastLength: Toast.LENGTH_SHORT,
               gravity: ToastGravity.BOTTOM,
               timeInSecForIosWeb: 1,
               fontSize: 14.0);
+               Navigator.push(context,
+            MaterialPageRoute(builder: (content) => const LoginScreen()));
           return;
         } else {
           Fluttertoast.showToast(

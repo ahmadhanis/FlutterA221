@@ -294,6 +294,10 @@ class _SellerScreenState extends State<SellerScreen> {
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1,
           fontSize: 14.0);
+          titlecenter = "Please register an account";
+          setState(() {
+            
+          });
       return; //exit method if true
     }
     //if registered user, continue get request
