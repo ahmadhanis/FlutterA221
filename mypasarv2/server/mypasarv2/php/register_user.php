@@ -12,8 +12,9 @@ $phone = $_POST['phone'];
 $password = sha1($_POST['password']);
 $otp = rand(10000,99999);
 $address = "na";
+$credit = 20;
 
-$sqlregister = "INSERT INTO `tbl_users`(`user_email`, `user_name`, `user_phone`, `user_address`, `user_otp`, `user_password`) VALUES ('$email','$name','$phone','$address',$otp,'$password')";
+$sqlregister = "INSERT INTO `tbl_users`(`user_email`, `user_name`, `user_phone`, `user_address`, `user_otp`, `user_password`,`user_credit`) VALUES ('$email','$name','$phone','$address',$otp,'$password',$credit)";
 
 try {
 	if ($conn->query($sqlregister) === TRUE) {

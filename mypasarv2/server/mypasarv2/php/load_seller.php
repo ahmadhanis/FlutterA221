@@ -5,10 +5,9 @@ if (!isset($_POST)) {
     die();
 }
 include_once("dbconnect.php");
-$email = $_POST['email'];
-$password = sha1($_POST['password']);
-$sqllogin = "SELECT * FROM tbl_users WHERE user_email = '$email' AND user_password = '$password'";
-$result = $conn->query($sqllogin);
+$sellerid = $_POST['sellerid'];
+$sqlloadseller = "SELECT * FROM tbl_users WHERE user_id = '$sellerid'";
+$result = $conn->query($sqlloadseller);
 
 if ($result->num_rows > 0) {
 	while ($row = $result->fetch_assoc()) {

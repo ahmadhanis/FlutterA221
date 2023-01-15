@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:mypasarv2/views/screens/mainscreen.dart';
+import 'package:mypasarv2/views/screens/buyerscreen.dart';
 import 'package:mypasarv2/views/screens/registrationscreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -169,7 +169,7 @@ class _LoginScreenState extends State<LoginScreen> {
         User user = User.fromJson(jsonResponse['data']);
         print(user.phone);
         Navigator.push(context,
-            MaterialPageRoute(builder: (content) => MainScreen(user: user)));
+            MaterialPageRoute(builder: (content) => BuyerScreen(user: user)));
       } else {
         Fluttertoast.showToast(
             msg: "Login Failed",
@@ -188,11 +188,11 @@ class _LoginScreenState extends State<LoginScreen> {
         name: "unregistered",
         address: "na",
         phone: "0123456789",
-        regdate: "0");
+        regdate: "0", credit: '0');
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (content) => MainScreen(
+            builder: (content) => BuyerScreen(
                   user: user,
                 )));
   }

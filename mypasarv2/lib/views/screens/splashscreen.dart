@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../config.dart';
 import '../../models/user.dart';
-import 'mainscreen.dart';
+import 'buyerscreen.dart';
 import 'package:http/http.dart' as http;
 
 class SplashScreen extends StatefulWidget {
@@ -54,7 +54,7 @@ class _SplashScreenState extends State<SplashScreen> {
               () => Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                      builder: (content) => MainScreen(user: user))));
+                      builder: (content) => BuyerScreen(user: user))));
         } else {
           User user = User(
               id: "0",
@@ -62,13 +62,13 @@ class _SplashScreenState extends State<SplashScreen> {
               name: "unregistered",
               address: "na",
               phone: "0123456789",
-              regdate: "0");
+              regdate: "0", credit: '0');
           Timer(
               const Duration(seconds: 3),
               () => Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                      builder: (content) => MainScreen(user: user))));
+                      builder: (content) => BuyerScreen(user: user))));
         }
       });
     } else {
@@ -78,11 +78,11 @@ class _SplashScreenState extends State<SplashScreen> {
           name: "unregistered",
           address: "na",
           phone: "0123456789",
-          regdate: "0");
+          regdate: "0", credit: '0');
       Timer(
           const Duration(seconds: 3),
           () => Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (content) => MainScreen(user: user))));
+              MaterialPageRoute(builder: (content) => BuyerScreen(user: user))));
     }
   }
 }

@@ -9,6 +9,7 @@ class Product {
   String? productState;
   String? productLocal;
   String? productLat;
+  String? productLng;
   String? productDate;
 
   Product(
@@ -22,6 +23,7 @@ class Product {
       this.productState,
       this.productLocal,
       this.productLat,
+      this.productLng,
       this.productDate});
 
   Product.fromJson(Map<String, dynamic> json) {
@@ -35,6 +37,7 @@ class Product {
     productState = json['product_state'];
     productLocal = json['product_local'];
     productLat = json['product_lat'];
+    productLng = json['product_lng'];
     productDate = json['product_date'];
   }
 
@@ -50,6 +53,7 @@ class Product {
     data['product_state'] = productState;
     data['product_local'] = productLocal;
     data['product_lat'] = productLat;
+    data['product_lng'] = productLng;
     data['product_date'] = productDate;
     return data;
   }

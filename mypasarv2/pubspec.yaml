@@ -37,12 +37,14 @@ dependencies:
   geocoding: ^2.0.5
   geolocator: ^9.0.2
   google_fonts: ^3.0.1
+  google_maps_flutter: ^2.2.3
   http: ^0.13.5
   image_cropper: ^3.0.1
   image_picker: ^0.8.6
   intl: ^0.18.0
   ndialog: ^4.2.2
   shared_preferences: ^2.0.15
+  url_launcher: ^6.1.7
 
 dev_dependencies:
   flutter_lints: ^2.0.0

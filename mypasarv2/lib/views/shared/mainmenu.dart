@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/user.dart';
-import '../screens/mainscreen.dart';
+import '../screens/buyerscreen.dart';
 import '../screens/profilescreen.dart';
 import '../screens/sellerscreen.dart';
 import 'EnterExitRoute.dart';
@@ -33,12 +33,12 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
             onTap: () {
               Navigator.pop(context);
               // Navigator.push(context,
-              //     MaterialPageRoute(builder: (content) => MainScreen()));
+              //     MaterialPageRoute(builder: (content) => BuyerScreen()));
               Navigator.push(
                   context,
                   EnterExitRoute(
-                      exitPage: MainScreen(user: widget.user),
-                      enterPage: MainScreen(user: widget.user)));
+                      exitPage: BuyerScreen(user: widget.user),
+                      enterPage: BuyerScreen(user: widget.user)));
             },
           ),
           ListTile(
@@ -52,7 +52,7 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
               Navigator.push(
                   context,
                   EnterExitRoute(
-                      exitPage: MainScreen(user: widget.user),
+                      exitPage: BuyerScreen(user: widget.user),
                       enterPage: SellerScreen(user: widget.user)));
             },
           ),
@@ -67,7 +67,7 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
               Navigator.push(
                   context,
                   EnterExitRoute(
-                      exitPage: MainScreen(user: widget.user),
+                      exitPage: BuyerScreen(user: widget.user),
                       enterPage: ProfileScreen(
                         user: widget.user,
                       )));

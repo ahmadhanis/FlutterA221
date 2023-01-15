@@ -32,7 +32,7 @@
 			$prlist['product_state'] = $row['product_state'];
 			$prlist['product_local'] = $row['product_local'];
 			$prlist['product_lat'] = $row['product_lat'];
-			$prlist['product_lat'] = $row['product_lat'];
+			$prlist['product_lng'] = $row['product_lng'];
 			$prlist['product_date'] = $row['product_date'];
 			array_push($productsarray["products"],$prlist);
 		}
