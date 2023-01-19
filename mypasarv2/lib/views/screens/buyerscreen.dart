@@ -1,11 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
-import 'package:mypasarv2/config.dart';
+import 'package:mypasarv2/serverconfig.dart';
 import 'package:mypasarv2/models/product.dart';
 import 'package:ndialog/ndialog.dart';
 import '../../models/user.dart';
@@ -109,7 +108,7 @@ class _BuyerScreenState extends State<BuyerScreen> {
                                     width: resWidth / 2,
                                     fit: BoxFit.cover,
                                     imageUrl:
-                                        "${Config.SERVER}/assets/productimages/${productList[index].productId}.png",
+                                        "${ServerConfig.SERVER}/assets/productimages/${productList[index].productId}.png",
                                     placeholder: (context, url) =>
                                         const LinearProgressIndicator(),
                                     errorWidget: (context, url, error) =>
@@ -194,7 +193,7 @@ class _BuyerScreenState extends State<BuyerScreen> {
     http
         .get(
       Uri.parse(
-          "${Config.SERVER}/php/loadallproducts.php?search=$search&pageno=$pageno"),
+          "${ServerConfig.SERVER}/php/loadallproducts.php?search=$search&pageno=$pageno"),
     )
         .then((response) {
       ProgressDialog progressDialog = ProgressDialog(
@@ -323,7 +322,7 @@ class _BuyerScreenState extends State<BuyerScreen> {
   }
 
   loadSingleSeller(int index) {
-    http.post(Uri.parse("${Config.SERVER}/php/load_seller.php"),
+    http.post(Uri.parse("${ServerConfig.SERVER}/php/load_seller.php"),
         body: {"sellerid": productList[index].userId}).then((response) {
       print(response.body);
       var jsonResponse = json.decode(response.body);

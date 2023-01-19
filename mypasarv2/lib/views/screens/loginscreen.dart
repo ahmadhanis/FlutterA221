@@ -7,7 +7,7 @@ import 'package:mypasarv2/views/screens/registrationscreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
-import '../../config.dart';
+import '../../serverconfig.dart';
 import '../../models/user.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -24,7 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   bool _isChecked = false;
   var screenHeight, screenWidth, cardwitdh;
-
+  var pathAsset = "assets/images/login.jpg";
   @override
   void initState() {
     super.initState();
@@ -38,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (screenWidth <= 600) {
       cardwitdh = screenWidth;
     } else {
-      cardwitdh = 400.00;
+      cardwitdh = screenWidth;
     }
     return Scaffold(
       appBar: AppBar(
@@ -47,9 +47,19 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Center(
           child: SingleChildScrollView(
               child: SizedBox(
-        width: cardwitdh,
+        width: screenWidth,
         child: Column(
           children: [
+            SizedBox(
+                height: screenHeight / 2.5,
+                width: screenWidth,
+                child: Image.asset(
+                  pathAsset,
+                  fit: BoxFit.fill,
+                )),
+            const SizedBox(
+              height: 20,
+            ),
             Card(
                 elevation: 8,
                 margin: const EdgeInsets.all(8),
@@ -160,7 +170,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     String _email = _emailEditingController.text;
     String _pass = _passEditingController.text;
-    http.post(Uri.parse("${Config.SERVER}/php/login_user.php"),
+    http.post(Uri.parse("${ServerConfig.SERVER}/php/login_user.php"),
         body: {"email": _email, "password": _pass}).then((response) {
       print(response.body);
       var jsonResponse = json.decode(response.body);
@@ -188,7 +198,8 @@ class _LoginScreenState extends State<LoginScreen> {
         name: "unregistered",
         address: "na",
         phone: "0123456789",
-        regdate: "0", credit: '0');
+        regdate: "0",
+        credit: '0');
     Navigator.push(
         context,
         MaterialPageRoute(

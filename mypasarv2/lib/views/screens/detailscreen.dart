@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:mypasarv2/config.dart';
+import 'package:mypasarv2/serverconfig.dart';
 import 'package:http/http.dart' as http;
 import 'package:mypasarv2/models/product.dart';
 import 'package:mypasarv2/models/user.dart';
@@ -76,7 +76,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     width: resWidth,
                     fit: BoxFit.cover,
                     imageUrl:
-                        "${Config.SERVER}/assets/productimages/${widget.product.productId}.png",
+                        "${ServerConfig.SERVER}/assets/productimages/${widget.product.productId}.png",
                     placeholder: (context, url) =>
                         const LinearProgressIndicator(),
                     errorWidget: (context, url, error) =>
@@ -314,7 +314,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
     String delivery = _prdelEditingController.text;
     String qty = _prqtyEditingController.text;
     
-    http.post(Uri.parse("${Config.SERVER}/php/update_product.php"), body: {
+    http.post(Uri.parse("${ServerConfig.SERVER}/php/update_product.php"), body: {
       "productid": widget.product.productId,
       "userid": widget.user.id,
       "prname": prname,

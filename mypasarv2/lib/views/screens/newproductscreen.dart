@@ -7,7 +7,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:http/http.dart' as http;
-import 'package:mypasarv2/config.dart';
+import 'package:mypasarv2/serverconfig.dart';
 import 'package:mypasarv2/models/user.dart';
 
 class NewProductScreen extends StatefulWidget {
@@ -456,7 +456,7 @@ class _NewProductScreenState extends State<NewProductScreen> {
     String local = _prlocalEditingController.text;
     String base64Image = base64Encode(_image!.readAsBytesSync());
 
-    http.post(Uri.parse("${Config.SERVER}/php/insert_product.php"), body: {
+    http.post(Uri.parse("${ServerConfig.SERVER}/php/insert_product.php"), body: {
       "userid": widget.user.id,
       "prname": prname,
       "prdesc": prdesc,

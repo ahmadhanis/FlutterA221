@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../config.dart';
+import '../../serverconfig.dart';
 import '../../models/user.dart';
 import 'buyerscreen.dart';
 import 'package:http/http.dart' as http;
@@ -42,7 +42,7 @@ class _SplashScreenState extends State<SplashScreen> {
     String email = (prefs.getString('email')) ?? '';
     String pass = (prefs.getString('pass')) ?? '';
     if (email.isNotEmpty) {
-      http.post(Uri.parse("${Config.SERVER}/php/login_user.php"),
+      http.post(Uri.parse("${ServerConfig.SERVER}/php/login_user.php"),
           body: {"email": email, "password": pass}).then((response) {
             print(response.body);
         var jsonResponse = json.decode(response.body);

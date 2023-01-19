@@ -5,7 +5,7 @@ import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:mypasarv2/config.dart';
+import 'package:mypasarv2/serverconfig.dart';
 import 'package:mypasarv2/models/product.dart';
 import 'package:mypasarv2/models/user.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -55,7 +55,7 @@ class _BuyerProductDetailsState extends State<BuyerProductDetails> {
                 width: resWidth,
                 fit: BoxFit.cover,
                 imageUrl:
-                    "${Config.SERVER}/assets/productimages/${widget.product.productId}.png",
+                    "${ServerConfig.SERVER}/assets/productimages/${widget.product.productId}.png",
                 placeholder: (context, url) => const LinearProgressIndicator(),
                 errorWidget: (context, url, error) => const Icon(Icons.error),
               )),
@@ -295,7 +295,7 @@ class _BuyerProductDetailsState extends State<BuyerProductDetails> {
             height: screenHeight,
             width: screenWidth,
             child: GoogleMap(
-              mapType: MapType.normal,
+              mapType: MapType.satellite,
               initialCameraPosition: campos,
               markers: Set<Marker>.of(markers.values),
               onMapCreated: (GoogleMapController controller) {

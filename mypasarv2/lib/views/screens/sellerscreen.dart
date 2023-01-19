@@ -1,18 +1,14 @@
-// ignore_for_file: unused_field, prefer_typing_uninitialized_variables
 
 import 'dart:convert';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:mypasarv2/config.dart';
+import 'package:mypasarv2/serverconfig.dart';
 import 'package:mypasarv2/models/product.dart';
 import 'package:mypasarv2/views/screens/detailscreen.dart';
-import 'package:mypasarv2/views/screens/loginscreen.dart';
 import 'package:mypasarv2/views/screens/newproductscreen.dart';
-import 'package:mypasarv2/views/screens/registrationscreen.dart';
 import 'package:ndialog/ndialog.dart';
 import '../../models/user.dart';
 import '../shared/mainmenu.dart';
@@ -65,10 +61,7 @@ class _SellerScreenState extends State<SellerScreen> {
       onWillPop: () async => false,
       child: Scaffold(
           appBar: AppBar(title: const Text("Seller"), actions: [
-            IconButton(
-                onPressed: _registrationForm,
-                icon: const Icon(Icons.app_registration)),
-            IconButton(onPressed: _loginForm, icon: const Icon(Icons.login)),
+            
             PopupMenuButton(
                 // add icon, by default "3 dot" icon
                 // icon: Icon(Icons.book)
@@ -135,7 +128,7 @@ class _SellerScreenState extends State<SellerScreen> {
                                     width: resWidth / 2,
                                     fit: BoxFit.cover,
                                     imageUrl:
-                                        "${Config.SERVER}/assets/productimages/${productList[index].productId}.png",
+                                        "${ServerConfig.SERVER}/assets/productimages/${productList[index].productId}.png",
                                     placeholder: (context, url) =>
                                         const LinearProgressIndicator(),
                                     errorWidget: (context, url, error) =>
@@ -188,15 +181,7 @@ class _SellerScreenState extends State<SellerScreen> {
     }
   }
 
-  void _registrationForm() {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (content) => const RegistrationScreen()));
-  }
-
-  void _loginForm() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (content) => const LoginScreen()));
-  }
+  
 
   Future<void> _gotoNewProduct() async {
     if (widget.user.id == "0") {
@@ -304,7 +289,7 @@ class _SellerScreenState extends State<SellerScreen> {
     http
         .get(
       Uri.parse(
-          "${Config.SERVER}/php/loadsellerproducts.php?userid=${widget.user.id}"),
+          "${ServerConfig.SERVER}/php/loadsellerproducts.php?userid=${widget.user.id}"),
     )
         .then((response) {
       // wait for response from the request
@@ -393,7 +378,7 @@ class _SellerScreenState extends State<SellerScreen> {
 
   void _deleteProduct(index) {
     try {
-      http.post(Uri.parse("${Config.SERVER}/php/delete_product.php"), body: {
+      http.post(Uri.parse("${ServerConfig.SERVER}/php/delete_product.php"), body: {
         "productid": productList[index].productId,
       }).then((response) {
         var data = jsonDecode(response.body);
