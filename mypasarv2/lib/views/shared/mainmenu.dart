@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mypasarv2/serverconfig.dart';
 import '../../models/user.dart';
 import '../screens/buyerscreen.dart';
 import '../screens/profilescreen.dart';
@@ -14,8 +15,11 @@ class MainMenuWidget extends StatefulWidget {
 }
 
 class _MainMenuWidgetState extends State<MainMenuWidget> {
+  late double screenHeight;
+  var pathAsset = "assets/images/profile.png";
   @override
   Widget build(BuildContext context) {
+    screenHeight = MediaQuery.of(context).size.height;
     return Drawer(
       width: 250,
       elevation: 10,
@@ -24,8 +28,16 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
           UserAccountsDrawerHeader(
             accountEmail: Text(widget.user.email.toString()),
             accountName: Text(widget.user.name.toString()),
-            currentAccountPicture: const CircleAvatar(
+            currentAccountPicture: CircleAvatar(
               radius: 30.0,
+              child: ClipOval(
+                child: Image.network(
+                  "${ServerConfig.SERVER}/assets/profileimages/${widget.user.id}.png",
+                  errorBuilder: (context, error, stackTrace) {
+                    return Image.asset(pathAsset);
+                  },
+                ),
+              ),
             ),
           ),
           ListTile(
@@ -73,6 +85,18 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
                       )));
             },
           ),
+          const Divider(
+            color: Colors.blue,
+          ),
+          SizedBox(
+            height: screenHeight / 2.3,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: const [Text("Version 0.1b")],
+            ),
+          )
         ],
       ),
     );

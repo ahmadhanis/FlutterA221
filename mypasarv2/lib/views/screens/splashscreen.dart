@@ -44,7 +44,6 @@ class _SplashScreenState extends State<SplashScreen> {
     if (email.isNotEmpty) {
       http.post(Uri.parse("${ServerConfig.SERVER}/php/login_user.php"),
           body: {"email": email, "password": pass}).then((response) {
-            print(response.body);
         var jsonResponse = json.decode(response.body);
         if (response.statusCode == 200 && jsonResponse['status'] == "success") {
           

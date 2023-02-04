@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "226588533435",
+    "firebase_url": "https://esp-firebase-demo-a15c2-default-rtdb.firebaseio.com",
+    "project_id": "esp-firebase-demo-a15c2",
+    "storage_bucket": "esp-firebase-demo-a15c2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:226588533435:android:b6b349731c7480352e7f9e",
+        "android_client_info": {
+          "package_name": "com.slumberjer.sfarmskte"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "226588533435-9h5pk7fomcrjbq75qtl705c9745vc61a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBYOMnDOBXZgBlup5Tw1twxWUXh8KXFu5A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "226588533435-9h5pk7fomcrjbq75qtl705c9745vc61a.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "226588533435-lt0cfc0bdsdjo1u6f79rn4mevtvsgk72.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.slumberjer.sfarmskte"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

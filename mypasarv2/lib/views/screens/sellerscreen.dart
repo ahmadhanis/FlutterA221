@@ -24,10 +24,10 @@ class SellerScreen extends StatefulWidget {
 }
 
 class _SellerScreenState extends State<SellerScreen> {
-  var _lat, _lng;
   late Position _position;
   List<Product> productList = <Product>[];
   String titlecenter = "Loading...";
+  // ignore: prefer_typing_uninitialized_variables
   var placemarks;
   final df = DateFormat('dd/MM/yyyy hh:mm a');
   late double screenHeight, screenWidth, resWidth;
@@ -42,7 +42,6 @@ class _SellerScreenState extends State<SellerScreen> {
   @override
   void dispose() {
     productList = [];
-    print("dispose");
     super.dispose();
   }
 
@@ -79,11 +78,8 @@ class _SellerScreenState extends State<SellerScreen> {
             }, onSelected: (value) {
               if (value == 0) {
                 _gotoNewProduct();
-                print("My account menu is selected.");
               } else if (value == 1) {
-                print("Settings menu is selected.");
               } else if (value == 2) {
-                print("Logout menu is selected.");
               }
             }),
           ]),
@@ -95,7 +91,7 @@ class _SellerScreenState extends State<SellerScreen> {
               : Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
                       child: Text(
                         "Your current products/services (${productList.length} found)",
                         style: const TextStyle(
@@ -347,7 +343,7 @@ class _SellerScreenState extends State<SellerScreen> {
               borderRadius: BorderRadius.all(Radius.circular(20.0))),
           title: Text(
             "Delete ${truncateString(productList[index].productName.toString(), 15)}",
-            style: TextStyle(),
+            style: const TextStyle(),
           ),
           content: const Text("Are you sure?", style: TextStyle()),
           actions: <Widget>[
@@ -401,8 +397,8 @@ class _SellerScreenState extends State<SellerScreen> {
           return;
         }
       });
+    // ignore: empty_catches
     } catch (e) {
-      print(e.toString());
     }
   }
 }

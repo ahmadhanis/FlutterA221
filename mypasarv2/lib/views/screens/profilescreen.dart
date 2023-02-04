@@ -10,7 +10,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:mypasarv2/serverconfig.dart';
-import 'package:ndialog/ndialog.dart';
+import 'package:mypasarv2/views/screens/creditscreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../models/user.dart';
 import '../shared/mainmenu.dart';
@@ -37,7 +37,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool isDisable = false;
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _addressController = TextEditingController();
   final TextEditingController _oldpasswordController = TextEditingController();
   final TextEditingController _newpasswordController = TextEditingController();
   Random random = Random();
@@ -70,87 +69,90 @@ class _ProfileScreenState extends State<ProfileScreen> {
           appBar: AppBar(title: const Text("Profile")),
           body: Column(children: [
             Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  height: screenHeight * 0.25,
-                  child: Row(
-                    children: [
-                      Flexible(
-                        flex: 4,
-                        child: SizedBox(
-                            height: screenHeight * 0.25,
-                            child: GestureDetector(
-                              onTap: isDisable ? null : _updateImageDialog,
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(10, 5, 10, 5),
-                                child: CachedNetworkImage(
-                                  imageUrl:
-                                      "${ServerConfig.SERVER}/assets/profileimages/${widget.user.id}.png?v=$val",
-                                  placeholder: (context, url) =>
-                                      const LinearProgressIndicator(),
-                                  errorWidget: (context, url, error) =>
-                                      const Icon(
-                                    Icons.image_not_supported,
-                                    size: 128,
+                padding: const EdgeInsets.all(4.0),
+                child: Card(
+                  child: SizedBox(
+                    height: screenHeight * 0.25,
+                    child: Row(
+                      children: [
+                        Flexible(
+                          flex: 4,
+                          child: SizedBox(
+                              height: screenHeight * 0.25,
+                              child: GestureDetector(
+                                onTap: isDisable ? null : _updateImageDialog,
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(5, 5, 5, 5),
+                                  child: CachedNetworkImage(
+                                    imageUrl:
+                                        "${ServerConfig.SERVER}/assets/profileimages/${widget.user.id}.png?v=$val",
+                                    placeholder: (context, url) =>
+                                        const LinearProgressIndicator(),
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(
+                                      Icons.image_not_supported,
+                                      size: 128,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            )),
-                      ),
-                      Flexible(
-                          flex: 6,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(widget.user.name.toString(),
-                                  style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold)),
-                              const Padding(
-                                padding: EdgeInsets.fromLTRB(0, 2, 0, 8),
-                                child: Divider(
-                                  color: Colors.blueGrey,
-                                  height: 2,
-                                  thickness: 2.0,
+                              )),
+                        ),
+                        Flexible(
+                            flex: 6,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(widget.user.name.toString(),
+                                    style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold)),
+                                const Padding(
+                                  padding: EdgeInsets.fromLTRB(0, 2, 0, 8),
+                                  child: Divider(
+                                    color: Colors.blueGrey,
+                                    height: 2,
+                                    thickness: 2.0,
+                                  ),
                                 ),
-                              ),
-                              Table(
-                                columnWidths: const {
-                                  0: FractionColumnWidth(0.3),
-                                  1: FractionColumnWidth(0.7)
-                                },
-                                defaultVerticalAlignment:
-                                    TableCellVerticalAlignment.middle,
-                                children: [
-                                  TableRow(children: [
-                                    const Icon(Icons.email),
-                                    Text(widget.user.email.toString()),
-                                  ]),
-                                  TableRow(children: [
-                                    const Icon(Icons.phone),
-                                    Text(widget.user.phone.toString()),
-                                  ]),
-                                  TableRow(children: [
-                                    const Icon(Icons.credit_score),
-                                    Text(widget.user.credit.toString()),
-                                  ]),
-                                  widget.user.regdate.toString() == ""
-                                      ? TableRow(children: [
-                                          const Icon(Icons.date_range),
-                                          Text(df.format(DateTime.parse(
-                                              widget.user.regdate.toString())))
-                                        ])
-                                      : TableRow(children: [
-                                          const Icon(Icons.date_range),
-                                          Text(df.format(DateTime.now()))
-                                        ]),
-                                ],
-                              ),
-                            ],
-                          ))
-                    ],
+                                Table(
+                                  columnWidths: const {
+                                    0: FractionColumnWidth(0.3),
+                                    1: FractionColumnWidth(0.7)
+                                  },
+                                  defaultVerticalAlignment:
+                                      TableCellVerticalAlignment.middle,
+                                  children: [
+                                    TableRow(children: [
+                                      const Icon(Icons.email),
+                                      Text(widget.user.email.toString()),
+                                    ]),
+                                    TableRow(children: [
+                                      const Icon(Icons.phone),
+                                      Text(widget.user.phone.toString()),
+                                    ]),
+                                    TableRow(children: [
+                                      const Icon(Icons.credit_score),
+                                      Text(widget.user.credit.toString()),
+                                    ]),
+                                    widget.user.regdate.toString() == ""
+                                        ? TableRow(children: [
+                                            const Icon(Icons.date_range),
+                                            Text(df.format(DateTime.parse(widget
+                                                .user.regdate
+                                                .toString())))
+                                          ])
+                                        : TableRow(children: [
+                                            const Icon(Icons.date_range),
+                                            Text(df.format(DateTime.now()))
+                                          ]),
+                                  ],
+                                ),
+                              ],
+                            ))
+                      ],
+                    ),
                   ),
                 )),
             Flexible(
@@ -231,7 +233,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  void buyCreditPage() {}
+  Future<void> buyCreditPage() async {
+    await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (BuildContext context) => CreditScreen(
+                  user: widget.user,
+                )));
+    _loadNewCredit();
+  }
+
+  void _loadNewCredit() {
+    http.post(Uri.parse("${ServerConfig.SERVER}/php/load_user.php"),
+        body: {"userid": widget.user.id}).then((response) {
+      var jsonResponse = json.decode(response.body);
+      if (response.statusCode == 200 && jsonResponse['status'] == "success") {
+        final jsonResponse = json.decode(response.body);
+        //print(response.body);
+        User newuser = User.fromJson(jsonResponse['data']);
+        widget.user.credit = newuser.credit;
+        setState(() {});
+      }
+    });
+  }
 
   void _registerAccountDialog() {
     showDialog(
@@ -501,7 +525,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           "userid": widget.user.id,
           "newname": newname,
         }).then((response) {
-      print(response.body);
       var jsondata = jsonDecode(response.body);
       if (response.statusCode == 200 && jsondata['status'] == 'success') {
         Fluttertoast.showToast(
@@ -588,7 +611,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           "userid": widget.user.id,
           "newphone": newphone,
         }).then((response) {
-      print(response.body);
       var jsondata = jsonDecode(response.body);
       if (response.statusCode == 200 && jsondata['status'] == 'success') {
         Fluttertoast.showToast(
@@ -671,62 +693,62 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  void _updateAddressDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return AlertDialog(
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20.0))),
-          title: const Text(
-            "Change Address?",
-            style: TextStyle(),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextFormField(
-                minLines: 6,
-                maxLines: 6,
-                controller: _addressController,
-                decoration: InputDecoration(
-                    labelText: 'Home Address',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0))),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your home address';
-                  }
-                  return null;
-                },
-              ),
-            ],
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text(
-                "Yes",
-                style: TextStyle(),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text(
-                "No",
-                style: TextStyle(),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+  // void _updateAddressDialog() {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       // return object of type Dialog
+  //       return AlertDialog(
+  //         shape: const RoundedRectangleBorder(
+  //             borderRadius: BorderRadius.all(Radius.circular(20.0))),
+  //         title: const Text(
+  //           "Change Address?",
+  //           style: TextStyle(),
+  //         ),
+  //         content: Column(
+  //           mainAxisSize: MainAxisSize.min,
+  //           children: [
+  //             TextFormField(
+  //               minLines: 6,
+  //               maxLines: 6,
+  //               controller: _addressController,
+  //               decoration: InputDecoration(
+  //                   labelText: 'Home Address',
+  //                   border: OutlineInputBorder(
+  //                       borderRadius: BorderRadius.circular(5.0))),
+  //               validator: (value) {
+  //                 if (value == null || value.isEmpty) {
+  //                   return 'Please enter your home address';
+  //                 }
+  //                 return null;
+  //               },
+  //             ),
+  //           ],
+  //         ),
+  //         actions: <Widget>[
+  //           TextButton(
+  //             child: const Text(
+  //               "Yes",
+  //               style: TextStyle(),
+  //             ),
+  //             onPressed: () {
+  //               Navigator.of(context).pop();
+  //             },
+  //           ),
+  //           TextButton(
+  //             child: const Text(
+  //               "No",
+  //               style: TextStyle(),
+  //             ),
+  //             onPressed: () {
+  //               Navigator.of(context).pop();
+  //             },
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 
   void _logoutDialog() {
     showDialog(
@@ -790,7 +812,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           "oldpass": _oldpasswordController.text,
           "newpass": _newpasswordController.text,
         }).then((response) {
-      print(response.body);
       var jsondata = jsonDecode(response.body);
       if (response.statusCode == 200 && jsondata['status'] == 'success') {
         Fluttertoast.showToast(

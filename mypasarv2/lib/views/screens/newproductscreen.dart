@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -39,7 +41,7 @@ class _NewProductScreenState extends State<NewProductScreen> {
       TextEditingController();
   final _formKey = GlobalKey<FormState>();
   var _lat, _lng;
-
+  late double screenHeight, screenWidth;
   @override
   void initState() {
     super.initState();
@@ -57,6 +59,8 @@ class _NewProductScreenState extends State<NewProductScreen> {
   bool _isChecked = false;
   @override
   Widget build(BuildContext context) {
+    screenHeight = MediaQuery.of(context).size.height;
+    screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
         appBar: AppBar(title: const Text("New Product/Service")),
         body: SingleChildScrollView(
@@ -101,12 +105,10 @@ class _NewProductScreenState extends State<NewProductScreen> {
                           : null,
                       keyboardType: TextInputType.text,
                       decoration: const InputDecoration(
-                          labelText: 'Product Name',
-                          labelStyle: TextStyle(),
-                          icon: Icon(Icons.person),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(width: 2.0),
-                          ))),
+                        labelText: 'Product Name',
+                        labelStyle: TextStyle(),
+                        icon: Icon(Icons.person),
+                      )),
                   TextFormField(
                       textInputAction: TextInputAction.next,
                       controller: _prdescEditingController,
@@ -116,15 +118,13 @@ class _NewProductScreenState extends State<NewProductScreen> {
                       maxLines: 4,
                       keyboardType: TextInputType.text,
                       decoration: const InputDecoration(
-                          labelText: 'Product Description',
-                          alignLabelWithHint: true,
-                          labelStyle: TextStyle(),
-                          icon: Icon(
-                            Icons.person,
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(width: 2.0),
-                          ))),
+                        labelText: 'Product Description',
+                        alignLabelWithHint: true,
+                        labelStyle: TextStyle(),
+                        icon: Icon(
+                          Icons.person,
+                        ),
+                      )),
                   Row(
                     children: [
                       Flexible(
@@ -137,12 +137,10 @@ class _NewProductScreenState extends State<NewProductScreen> {
                                 : null,
                             keyboardType: TextInputType.number,
                             decoration: const InputDecoration(
-                                labelText: 'Product Price',
-                                labelStyle: TextStyle(),
-                                icon: Icon(Icons.money),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(width: 2.0),
-                                ))),
+                              labelText: 'Product Price',
+                              labelStyle: TextStyle(),
+                              icon: Icon(Icons.money),
+                            )),
                       ),
                       Flexible(
                         flex: 5,
@@ -154,12 +152,10 @@ class _NewProductScreenState extends State<NewProductScreen> {
                                 : null,
                             keyboardType: TextInputType.number,
                             decoration: const InputDecoration(
-                                labelText: 'Product Quantity',
-                                labelStyle: TextStyle(),
-                                icon: Icon(Icons.ad_units),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(width: 2.0),
-                                ))),
+                              labelText: 'Product Quantity',
+                              labelStyle: TextStyle(),
+                              icon: Icon(Icons.ad_units),
+                            )),
                       ),
                     ],
                   ),
@@ -177,12 +173,10 @@ class _NewProductScreenState extends State<NewProductScreen> {
                               controller: _prstateEditingController,
                               keyboardType: TextInputType.text,
                               decoration: const InputDecoration(
-                                  labelText: 'Current States',
-                                  labelStyle: TextStyle(),
-                                  icon: Icon(Icons.flag),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(width: 2.0),
-                                  )))),
+                                labelText: 'Current States',
+                                labelStyle: TextStyle(),
+                                icon: Icon(Icons.flag),
+                              ))),
                       Flexible(
                         flex: 5,
                         child: TextFormField(
@@ -194,12 +188,10 @@ class _NewProductScreenState extends State<NewProductScreen> {
                             controller: _prlocalEditingController,
                             keyboardType: TextInputType.text,
                             decoration: const InputDecoration(
-                                labelText: 'Current Locality',
-                                labelStyle: TextStyle(),
-                                icon: Icon(Icons.map),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(width: 2.0),
-                                ))),
+                              labelText: 'Current Locality',
+                              labelStyle: TextStyle(),
+                              icon: Icon(Icons.map),
+                            )),
                       )
                     ],
                   ),
@@ -213,12 +205,10 @@ class _NewProductScreenState extends State<NewProductScreen> {
                               val!.isEmpty ? "Must be more than zero" : null,
                           keyboardType: TextInputType.number,
                           decoration: const InputDecoration(
-                              labelText: 'Delivery charge/km',
-                              labelStyle: TextStyle(),
-                              icon: Icon(Icons.delivery_dining),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(width: 2.0),
-                              ))),
+                            labelText: 'Delivery charge/km',
+                            labelStyle: TextStyle(),
+                            icon: Icon(Icons.delivery_dining),
+                          )),
                     ),
                     Flexible(
                         flex: 5,
@@ -233,7 +223,8 @@ class _NewProductScreenState extends State<NewProductScreen> {
                         )),
                   ]),
                   SizedBox(
-                    width: 200,
+                    width: screenWidth,
+                    height: 50,
                     child: ElevatedButton(
                       child: const Text('Add Product'),
                       onPressed: () => {
@@ -270,6 +261,15 @@ class _NewProductScreenState extends State<NewProductScreen> {
     if (!_isChecked) {
       Fluttertoast.showToast(
           msg: "Please check agree checkbox",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          fontSize: 14.0);
+      return;
+    }
+    if (int.parse(widget.user.credit.toString()) == 0) {
+      Fluttertoast.showToast(
+          msg: "Your credit is low. Please purchase additional credit",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1,
@@ -352,7 +352,6 @@ class _NewProductScreenState extends State<NewProductScreen> {
       _image = File(pickedFile.path);
       cropImage();
     } else {
-      print('No image selected.');
     }
   }
 
@@ -369,7 +368,6 @@ class _NewProductScreenState extends State<NewProductScreen> {
       cropImage();
       //setState(() {});
     } else {
-      print('No image selected.');
     }
   }
 
@@ -456,19 +454,21 @@ class _NewProductScreenState extends State<NewProductScreen> {
     String local = _prlocalEditingController.text;
     String base64Image = base64Encode(_image!.readAsBytesSync());
 
-    http.post(Uri.parse("${ServerConfig.SERVER}/php/insert_product.php"), body: {
-      "userid": widget.user.id,
-      "prname": prname,
-      "prdesc": prdesc,
-      "prprice": prprice,
-      "delivery": delivery,
-      "qty": qty,
-      "state": state,
-      "local": local,
-      "lat": _lat,
-      "lon": _lng,
-      "image": base64Image
-    }).then((response) {
+    http.post(Uri.parse("${ServerConfig.SERVER}/php/insert_product.php"),
+        body: {
+          "userid": widget.user.id,
+          "prname": prname,
+          "prdesc": prdesc,
+          "prprice": prprice,
+          "delivery": delivery,
+          "qty": qty,
+          "state": state,
+          "local": local,
+          "lat": _lat,
+          "lon": _lng,
+          "credit": widget.user.credit,
+          "image": base64Image
+        }).then((response) {
       var data = jsonDecode(response.body);
       if (response.statusCode == 200 && data['status'] == "success") {
         Fluttertoast.showToast(
@@ -478,6 +478,8 @@ class _NewProductScreenState extends State<NewProductScreen> {
             timeInSecForIosWeb: 1,
             fontSize: 14.0);
         Navigator.of(context).pop();
+        int newcredit = int.parse(widget.user.credit.toString()) - 1;
+        widget.user.credit = newcredit.toString();
         return;
       } else {
         Fluttertoast.showToast(

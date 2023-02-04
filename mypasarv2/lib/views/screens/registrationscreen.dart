@@ -32,7 +32,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   bool _passwordVisible = true;
   final _formKey = GlobalKey<FormState>();
   String eula = "";
-  var screenHeight, screenWidth, cardwitdh;
+  late double screenHeight, screenWidth, cardwitdh;
   var pathAsset = "assets/images/register.jpg";
 
   @override
@@ -67,12 +67,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               ? "name must be longer than 3"
                               : null,
                           decoration: const InputDecoration(
-                              labelText: 'Name',
-                              labelStyle: TextStyle(),
-                              icon: Icon(Icons.person),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(width: 1.0),
-                              ))),
+                            labelText: 'Name',
+                            labelStyle: TextStyle(),
+                            icon: Icon(Icons.person),
+                          )),
                       TextFormField(
                           controller: _emailEditingController,
                           keyboardType: TextInputType.emailAddress,
@@ -82,12 +80,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               ? "enter a valid email"
                               : null,
                           decoration: const InputDecoration(
-                              labelText: 'Email',
-                              labelStyle: TextStyle(),
-                              icon: Icon(Icons.email),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(width: 1.0),
-                              ))),
+                            labelText: 'Email',
+                            labelStyle: TextStyle(),
+                            icon: Icon(Icons.email),
+                          )),
                       TextFormField(
                           controller: _phoneEditingController,
                           validator: (val) => val!.isEmpty || (val.length < 10)
@@ -95,12 +91,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               : null,
                           keyboardType: TextInputType.phone,
                           decoration: const InputDecoration(
-                              labelText: 'Phone',
-                              labelStyle: TextStyle(),
-                              icon: Icon(Icons.phone),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(width: 1.0),
-                              ))),
+                            labelText: 'Phone',
+                            labelStyle: TextStyle(),
+                            icon: Icon(Icons.phone),
+                          )),
                       TextFormField(
                           controller: _passEditingController,
                           keyboardType: TextInputType.visiblePassword,
@@ -110,9 +104,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             labelText: 'Password',
                             labelStyle: const TextStyle(),
                             icon: const Icon(Icons.password),
-                            focusedBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(width: 1.0),
-                            ),
                             suffixIcon: IconButton(
                               icon: Icon(
                                 _passwordVisible
@@ -134,9 +125,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             labelText: 'Re-Password',
                             labelStyle: const TextStyle(),
                             icon: const Icon(Icons.password),
-                            focusedBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(width: 1.0),
-                            ),
                             suffixIcon: IconButton(
                               icon: Icon(
                                 _passwordVisible
@@ -210,11 +198,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   void _registerAccountDialog() {
-    String _name = _nameEditingController.text;
-    String _email = _emailEditingController.text;
-    String _phone = _phoneEditingController.text;
-    String _passa = _passEditingController.text;
-    String _passb = _pass2EditingController.text;
+    String name = _nameEditingController.text;
+    String email = _emailEditingController.text;
+    String phone = _phoneEditingController.text;
+    String passa = _passEditingController.text;
+    String passb = _pass2EditingController.text;
 
     if (!_formKey.currentState!.validate()) {
       Fluttertoast.showToast(
@@ -234,7 +222,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           fontSize: 14.0);
       return;
     }
-    if (_passa != _passb) {
+    if (passa != passb) {
       Fluttertoast.showToast(
           msg: "Please check your passsword",
           toastLength: Toast.LENGTH_SHORT,
@@ -264,7 +252,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               ),
               onPressed: () {
                 Navigator.of(context).pop();
-                _registerUser(_name, _email, _phone, _passa);
+                _registerUser(name, email, phone, passa);
               },
             ),
             TextButton(
@@ -345,8 +333,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         var data = jsonDecode(response.body);
         if (response.statusCode == 200 && data['status'] == "success") {
           Fluttertoast.showToast(
-              msg: "Success. Please login",
-              toastLength: Toast.LENGTH_SHORT,
+              msg: "Success. Please check your email for verification",
+              toastLength: Toast.LENGTH_LONG,
               gravity: ToastGravity.BOTTOM,
               timeInSecForIosWeb: 1,
               fontSize: 14.0);
@@ -365,8 +353,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
         //print(response.body);
       });
-    } catch (e) {
-      print(e.toString());
-    }
+      // ignore: empty_catches
+    } catch (e) {}
   }
 }

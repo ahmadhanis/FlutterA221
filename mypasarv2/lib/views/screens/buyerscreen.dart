@@ -29,15 +29,24 @@ class _BuyerScreenState extends State<BuyerScreen> {
   int rowcount = 2;
   TextEditingController searchController = TextEditingController();
   String search = "all";
-  var seller;
+  late User seller;
   //for pagination
+  // ignore: prefer_typing_uninitialized_variables
   var color;
-  var numofpage, curpage = 1;
+  int numofpage = 1, curpage = 1;
   int numberofresult = 0;
 //for pagination
   @override
   void initState() {
     super.initState();
+    seller = User(
+        id: "0",
+        email: "unregistered",
+        name: "unregistered",
+        address: "na",
+        phone: "0123456789",
+        regdate: "0",
+        credit: '0');
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _loadProducts("all", 1);
     });
@@ -78,7 +87,7 @@ class _BuyerScreenState extends State<BuyerScreen> {
               : Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
                       child: Text(
                         "Products/services ($numberofresult found)",
                         style: const TextStyle(
@@ -188,7 +197,7 @@ class _BuyerScreenState extends State<BuyerScreen> {
 
   void _loadProducts(String search, int pageno) {
     curpage = pageno; //init current page
-    numofpage ?? 1; //get total num of pages if not by default set to only 1
+    numofpage; //get total num of pages if not by default set to only 1
 
     http
         .get(
@@ -203,7 +212,6 @@ class _BuyerScreenState extends State<BuyerScreen> {
         title: null,
       );
       progressDialog.show();
-      print(response.body);
       // wait for response from the request
       if (response.statusCode == 200) {
         //if statuscode OK
@@ -262,7 +270,7 @@ class _BuyerScreenState extends State<BuyerScreen> {
     );
     progressDialog.show();
     Timer(const Duration(seconds: 1), () {
-      if (seller != null) {
+      if (seller.id != "0") {
         progressDialog.dismiss();
         Navigator.push(
             context,
@@ -324,7 +332,6 @@ class _BuyerScreenState extends State<BuyerScreen> {
   loadSingleSeller(int index) {
     http.post(Uri.parse("${ServerConfig.SERVER}/php/load_seller.php"),
         body: {"sellerid": productList[index].userId}).then((response) {
-      print(response.body);
       var jsonResponse = json.decode(response.body);
       if (response.statusCode == 200 && jsonResponse['status'] == "success") {
         seller = User.fromJson(jsonResponse['data']);

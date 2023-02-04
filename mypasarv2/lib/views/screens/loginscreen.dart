@@ -23,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final _formKey = GlobalKey<FormState>();
   bool _isChecked = false;
-  var screenHeight, screenWidth, cardwitdh;
+  late double screenHeight, screenWidth, cardwitdh;
   var pathAsset = "assets/images/login.jpg";
   @override
   void initState() {
@@ -44,116 +44,111 @@ class _LoginScreenState extends State<LoginScreen> {
       appBar: AppBar(
         title: const Text("Login"),
       ),
-      body: Center(
-          child: SingleChildScrollView(
-              child: SizedBox(
+      body: SingleChildScrollView(
+          child: SizedBox(
         width: screenWidth,
         child: Column(
-          children: [
-            SizedBox(
-                height: screenHeight / 2.5,
-                width: screenWidth,
-                child: Image.asset(
-                  pathAsset,
-                  fit: BoxFit.fill,
-                )),
-            const SizedBox(
-              height: 20,
-            ),
-            Card(
-                elevation: 8,
-                margin: const EdgeInsets.all(8),
-                child: Container(
-                    padding: const EdgeInsets.all(16),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(children: [
-                        TextFormField(
-                            controller: _emailEditingController,
-                            keyboardType: TextInputType.emailAddress,
-                            validator: (val) => val!.isEmpty ||
-                                    !val.contains("@") ||
-                                    !val.contains(".")
-                                ? "enter a valid email"
-                                : null,
-                            decoration: const InputDecoration(
-                                labelText: 'Email',
-                                labelStyle: TextStyle(),
-                                icon: Icon(Icons.email),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(width: 1.0),
-                                ))),
-                        TextFormField(
-                            controller: _passEditingController,
-                            keyboardType: TextInputType.visiblePassword,
-                            obscureText: true,
-                            decoration: const InputDecoration(
-                              labelText: 'Password',
-                              labelStyle: TextStyle(),
-                              icon: Icon(Icons.password),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(width: 1.0),
-                              ),
-                            )),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Checkbox(
-                              value: _isChecked,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  _isChecked = value!;
-                                  saveremovepref(value);
-                                });
-                              },
-                            ),
-                            Flexible(
-                              child: GestureDetector(
-                                onTap: null,
-                                child: const Text('Remember Me',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    )),
-                              ),
-                            ),
-                            MaterialButton(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5.0)),
-                              minWidth: 115,
-                              height: 50,
-                              elevation: 10,
-                              onPressed: _loginUser,
-                              color: Theme.of(context).colorScheme.primary,
-                              child: const Text('Login'),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                      ]),
-                    ))),
-            GestureDetector(
-              onTap: _goLogin,
-              child: const Text(
-                "No account? Create One",
-                style: TextStyle(fontSize: 18),
-              ),
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            GestureDetector(
-              onTap: _goHome,
-              child: const Text("Go back Home", style: TextStyle(fontSize: 18)),
-            )
-          ],
+      children: [
+        SizedBox(
+            height: screenHeight / 2.8,
+            width: screenWidth,
+            child: Image.asset(
+              pathAsset,
+              fit: BoxFit.fill,
+            )),
+        const SizedBox(
+          height: 10,
         ),
-      ))),
+        Card(
+            elevation: 8,
+            margin: const EdgeInsets.all(8),
+            child: Container(
+                padding: const EdgeInsets.all(16),
+                child: Form(
+                  key: _formKey,
+                  child: Column(children: [
+                    TextFormField(
+                        controller: _emailEditingController,
+                        keyboardType: TextInputType.emailAddress,
+                        validator: (val) => val!.isEmpty ||
+                                !val.contains("@") ||
+                                !val.contains(".")
+                            ? "enter a valid email"
+                            : null,
+                        decoration: const InputDecoration(
+                            labelText: 'Email',
+                            labelStyle: TextStyle(),
+                            icon: Icon(Icons.email),
+                           )),
+                    TextFormField(
+                        controller: _passEditingController,
+                        keyboardType: TextInputType.visiblePassword,
+                        obscureText: true,
+                        decoration: const InputDecoration(
+                          labelText: 'Password',
+                          labelStyle: TextStyle(),
+                          icon: Icon(Icons.password),
+                         
+                        )),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Checkbox(
+                          value: _isChecked,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              _isChecked = value!;
+                              saveremovepref(value);
+                            });
+                          },
+                        ),
+                        Flexible(
+                          child: GestureDetector(
+                            onTap: null,
+                            child: const Text('Remember Me',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                )),
+                          ),
+                        ),
+                        MaterialButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0)),
+                          minWidth: 115,
+                          height: 50,
+                          elevation: 10,
+                          onPressed: _loginUser,
+                          color: Theme.of(context).colorScheme.primary,
+                          child: const Text('Login'),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                  ]),
+                ))),
+        GestureDetector(
+          onTap: _goLogin,
+          child: const Text(
+            "No account? Create One",
+            style: TextStyle(fontSize: 18),
+          ),
+        ),
+        const SizedBox(
+          height: 8,
+        ),
+        GestureDetector(
+          onTap: _goHome,
+          child: const Text("Go back Home", style: TextStyle(fontSize: 18)),
+        )
+      ],
+        ),
+      )),
     );
   }
 
@@ -168,16 +163,13 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
-    String _email = _emailEditingController.text;
-    String _pass = _passEditingController.text;
+    String email = _emailEditingController.text;
+    String pass = _passEditingController.text;
     http.post(Uri.parse("${ServerConfig.SERVER}/php/login_user.php"),
-        body: {"email": _email, "password": _pass}).then((response) {
-      print(response.body);
+        body: {"email": email, "password": pass}).then((response) {
       var jsonResponse = json.decode(response.body);
       if (response.statusCode == 200 && jsonResponse['status'] == "success") {
-        print(jsonResponse);
         User user = User.fromJson(jsonResponse['data']);
-        print(user.phone);
         Navigator.push(context,
             MaterialPageRoute(builder: (content) => BuyerScreen(user: user)));
       } else {

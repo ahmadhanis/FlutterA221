@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
-import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -38,7 +37,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
   final TextEditingController _prlocalEditingController =
       TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  File? _image;
   late double screenHeight, screenWidth, resWidth;
   int rowcount = 2;
 
@@ -69,7 +67,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
           child: Column(children: [
             Card(
               elevation: 8,
-              child: Container(
+              child: SizedBox(
                   height: screenHeight / 3,
                   width: resWidth,
                   child: CachedNetworkImage(

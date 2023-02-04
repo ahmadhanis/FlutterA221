@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import, deprecated_member_use
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -48,7 +50,7 @@ class _BuyerProductDetailsState extends State<BuyerProductDetails> {
       body: Column(children: [
         Card(
           elevation: 8,
-          child: Container(
+          child: SizedBox(
               height: screenHeight / 3,
               width: resWidth,
               child: CachedNetworkImage(
@@ -290,7 +292,7 @@ class _BuyerProductDetailsState extends State<BuyerProductDetails> {
             "Location",
             style: TextStyle(),
           ),
-          content: Container(
+          content: SizedBox(
             //color: Colors.red,
             height: screenHeight,
             width: screenWidth,
